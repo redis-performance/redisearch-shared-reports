@@ -8,7 +8,10 @@
   table { border-collapse: collapse; width: 100%; }
   th, td { border: 1px solid #d0d0d0; padding: 6px 10px; vertical-align: middle; text-align: right; }
   th { background: #f2f2f2; text-align: center; font-weight: 600; }
-  td:nth-child(1), td:nth-child(2), td:nth-child(3) { text-align: left; }
+  /* Class-based left alignment for label columns. nth-child doesn't work
+     here because rowspan on Test+Command shifts the positional td index
+     in rows 2-N — the first two data cells would otherwise get left-aligned. */
+  td.test, td.cmd, td.met { text-align: left; }
   td.test  { background: #fafafa; font-weight: 600; }
   td.cmd   { background: #f7f7f7; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
   td.met   { color: #444; }
