@@ -27,7 +27,7 @@
   tr.profiles-row a { color: #1a5fb4; text-decoration: none; padding: 0 4px; }
   tr.profiles-row a:hover { text-decoration: underline; }
   tr.profiles-row td.profiles-label { text-align: left; color: #1a3a6d; font-weight: 600; }
-  td.skipped { color: #aaa; font-style: italic; font-size: 12px; background: #fafafa; }
+  td.skipped { color: #aaa; font-style: italic; font-size: 12px; background: #fafafa; vertical-align: middle; text-align: center; }
 </style>
 <h1>v8.6.0 → v8.6.7 → v8.7.90 → v8.7.91 focused regression check</h1>
 <p class="note">5 runs per version (latest), both sides built <code>LTO=0</code>. Cell format:
@@ -86,37 +86,29 @@ and <code>p50</code> (noise). Δ markers: 🟢 significant improvement (&gt;3% i
 <tr class="profiles-row cmd-divider">
 <td class="cmd" rowspan="5">Ft.aggregates (WORKERS=0)</td>
 <td class="met profiles-label">Polar Signals profiles</td>
-<td class="skipped">skipped</td>
+<td class="skipped" rowspan="5">skipped</td>
 <td class="profiles"><a href="https://cloud.polarsignals.com/projects/73d7b9ec-a06f-48b0-b476-745f4da61a35/views/default-view?from_a=1778753403557&amp;to_a=1778753763560&amp;time_selection_a=absolute:1778753403557-1778753763560&amp;expression_a=parca_agent:samples:count:cpu:nanoseconds:delta%7Btest_name=%22search-filtering-tag-numeric-filter-pipeline%22,git_hash=%2230204860f145da013ba042e0824df6d344aef4ce%22%7D&amp;flamechart_dimension=labels.node,labels.cpu&amp;sum_by_a=comm,test_name,git_hash,node&amp;sum_by_b=__none__&amp;group_by=function_name&amp;merge_from_a=1778753403557000000&amp;merge_to_a=1778753763560000000&amp;selection_a=parca_agent:samples:count:cpu:nanoseconds:delta%7Btest_name=%22search-filtering-tag-numeric-filter-pipeline%22,git_hash=%2230204860f145da013ba042e0824df6d344aef4ce%22%7D" target="_blank" rel="noopener noreferrer">10:12</a> · <a href="https://cloud.polarsignals.com/projects/73d7b9ec-a06f-48b0-b476-745f4da61a35/views/default-view?from_a=1778753074899&amp;to_a=1778753434902&amp;time_selection_a=absolute:1778753074899-1778753434902&amp;expression_a=parca_agent:samples:count:cpu:nanoseconds:delta%7Btest_name=%22search-filtering-tag-numeric-filter-pipeline%22,git_hash=%2230204860f145da013ba042e0824df6d344aef4ce%22%7D&amp;flamechart_dimension=labels.node,labels.cpu&amp;sum_by_a=comm,test_name,git_hash,node&amp;sum_by_b=__none__&amp;group_by=function_name&amp;merge_from_a=1778753074899000000&amp;merge_to_a=1778753434902000000&amp;selection_a=parca_agent:samples:count:cpu:nanoseconds:delta%7Btest_name=%22search-filtering-tag-numeric-filter-pipeline%22,git_hash=%2230204860f145da013ba042e0824df6d344aef4ce%22%7D" target="_blank" rel="noopener noreferrer">10:06</a> · <a href="https://cloud.polarsignals.com/projects/73d7b9ec-a06f-48b0-b476-745f4da61a35/views/default-view?from_a=1778752354787&amp;to_a=1778752714789&amp;time_selection_a=absolute:1778752354787-1778752714789&amp;expression_a=parca_agent:samples:count:cpu:nanoseconds:delta%7Btest_name=%22search-filtering-tag-numeric-filter-pipeline%22,git_hash=%2230204860f145da013ba042e0824df6d344aef4ce%22%7D&amp;flamechart_dimension=labels.node,labels.cpu&amp;sum_by_a=comm,test_name,git_hash,node&amp;sum_by_b=__none__&amp;group_by=function_name&amp;merge_from_a=1778752354787000000&amp;merge_to_a=1778752714789000000&amp;selection_a=parca_agent:samples:count:cpu:nanoseconds:delta%7Btest_name=%22search-filtering-tag-numeric-filter-pipeline%22,git_hash=%2230204860f145da013ba042e0824df6d344aef4ce%22%7D" target="_blank" rel="noopener noreferrer">09:54</a></td>
-<td class="skipped">skipped</td>
+<td class="skipped" rowspan="5">skipped</td>
 <td class="profiles"><a href="https://cloud.polarsignals.com/projects/73d7b9ec-a06f-48b0-b476-745f4da61a35/views/default-view?from_a=1778752076393&amp;to_a=1778752436395&amp;time_selection_a=absolute:1778752076393-1778752436395&amp;expression_a=parca_agent:samples:count:cpu:nanoseconds:delta%7Btest_name=%22search-filtering-tag-numeric-filter-pipeline%22,git_hash=%229aa81de244ff100ea03a08a07e5a683a5d03b9dc%22%7D&amp;flamechart_dimension=labels.node,labels.cpu&amp;sum_by_a=comm,test_name,git_hash,node&amp;sum_by_b=__none__&amp;group_by=function_name&amp;merge_from_a=1778752076393000000&amp;merge_to_a=1778752436395000000&amp;selection_a=parca_agent:samples:count:cpu:nanoseconds:delta%7Btest_name=%22search-filtering-tag-numeric-filter-pipeline%22,git_hash=%229aa81de244ff100ea03a08a07e5a683a5d03b9dc%22%7D" target="_blank" rel="noopener noreferrer">09:49</a> · <a href="https://cloud.polarsignals.com/projects/73d7b9ec-a06f-48b0-b476-745f4da61a35/views/default-view?from_a=1778752074855&amp;to_a=1778752434858&amp;time_selection_a=absolute:1778752074855-1778752434858&amp;expression_a=parca_agent:samples:count:cpu:nanoseconds:delta%7Btest_name=%22search-filtering-tag-numeric-filter-pipeline%22,git_hash=%229aa81de244ff100ea03a08a07e5a683a5d03b9dc%22%7D&amp;flamechart_dimension=labels.node,labels.cpu&amp;sum_by_a=comm,test_name,git_hash,node&amp;sum_by_b=__none__&amp;group_by=function_name&amp;merge_from_a=1778752074855000000&amp;merge_to_a=1778752434858000000&amp;selection_a=parca_agent:samples:count:cpu:nanoseconds:delta%7Btest_name=%22search-filtering-tag-numeric-filter-pipeline%22,git_hash=%229aa81de244ff100ea03a08a07e5a683a5d03b9dc%22%7D" target="_blank" rel="noopener noreferrer">09:49</a> · <a href="https://cloud.polarsignals.com/projects/73d7b9ec-a06f-48b0-b476-745f4da61a35/views/default-view?from_a=1778751698111&amp;to_a=1778752058113&amp;time_selection_a=absolute:1778751698111-1778752058113&amp;expression_a=parca_agent:samples:count:cpu:nanoseconds:delta%7Btest_name=%22search-filtering-tag-numeric-filter-pipeline%22,git_hash=%229aa81de244ff100ea03a08a07e5a683a5d03b9dc%22%7D&amp;flamechart_dimension=labels.node,labels.cpu&amp;sum_by_a=comm,test_name,git_hash,node&amp;sum_by_b=__none__&amp;group_by=function_name&amp;merge_from_a=1778751698111000000&amp;merge_to_a=1778752058113000000&amp;selection_a=parca_agent:samples:count:cpu:nanoseconds:delta%7Btest_name=%22search-filtering-tag-numeric-filter-pipeline%22,git_hash=%229aa81de244ff100ea03a08a07e5a683a5d03b9dc%22%7D" target="_blank" rel="noopener noreferrer">09:43</a></td>
 </tr>
 <tr>
 <td class="met">Ops/sec ↑</td>
-<td class="skipped">skipped</td>
 <td><b>13,431</b><br><span class='cv'>CV 4.4%</span></td>
-<td class="skipped">skipped</td>
 <td><b>13,051</b><br><span class='cv'>CV 3.4%</span></td>
 </tr>
 <tr>
 <td class="met">Latency ↓</td>
-<td class="skipped">skipped</td>
 <td><b>4.76</b><br><span class='cv'>CV 4.4%</span></td>
-<td class="skipped">skipped</td>
 <td><b>4.90</b><br><span class='cv'>CV 3.4%</span></td>
 </tr>
 <tr>
 <td class="met">p99 ↓</td>
-<td class="skipped">skipped</td>
 <td><b>5.95</b><br><span class='cv'>CV 3.9%</span></td>
-<td class="skipped">skipped</td>
 <td><b>6.11</b><br><span class='cv'>CV 3.0%</span></td>
 </tr>
 <tr>
 <td class="met">p99.9 ↓</td>
-<td class="skipped">skipped</td>
 <td><b>6.30</b><br><span class='cv'>CV 5.5%</span></td>
-<td class="skipped">skipped</td>
 <td><b>6.40</b><br><span class='cv'>CV 6.1%</span></td>
 </tr>
 </tbody></table>
