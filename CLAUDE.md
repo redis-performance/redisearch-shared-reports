@@ -47,6 +47,34 @@ For multi-version / multi-target comparison tables:
 - Drop `Totals` (it duplicates the per-command rows) and `p50` (it's noise) unless they tell their own story.
 - Profile rows: a single "Polar Signals profiles" row per (test, command) — or per topology if the spec runs all commands in one memtier invocation. Don't duplicate the same window across rows.
 
+## Linkable git hashes
+
+Every short SHA that appears in the report MUST link to the corresponding commit on GitHub. Readers should be able to click any hash in a column header, a "raw datapoints" bullet, an "individual reports" cross-reference, or a "PR head moved A → B → C" chain and land on the commit page.
+
+URL pattern (RediSearch — adjust the org/repo for other targets):
+
+```
+https://github.com/RediSearch/RediSearch/commit/<full-40-char-sha>
+```
+
+Anchor template (mirror the table-cell style — display the short form, link the full SHA):
+
+```html
+<a href="https://github.com/RediSearch/RediSearch/commit/<full>" target="_blank" rel="noopener noreferrer">{short}</a>
+```
+
+Places to cover:
+- Column headers in `<small>` sub-labels (e.g. `<small>{linked-short} · n=5</small>`).
+- "Setup" / "Targets" paragraph — any `<code>{hash}</code>` and any A → B → C chain.
+- "Raw datapoints" bullets — `Joan v2 ({linked-short})`.
+- "Individual reports" / cross-references — `[v2 ({linked-short}, n=5)](filename.html)`.
+
+Two safer ways to apply this consistently across a report:
+1. **Generate-time**: emit linked anchors directly from the report-builder script so the hashes are linked at first publish.
+2. **Post-process**: run a one-shot regex pass over the HTML. The HFE evolution report used a Python pass keyed on a `{short: full}` dict and a handful of `re.sub` patterns over `<small>SHORT · n=N</small>`, `<code>SHORT</code>`, `<code>SHORT → SHORT → …</code>`, and `(SHORT,` / `(SHORT)` patterns. Either approach is fine; pick whichever fits the existing builder.
+
+If short hashes appear ambiguous (e.g. a 7-char prefix matches multiple unrelated commits), use a longer prefix in the display text — at 8 chars collisions are extremely unlikely on a single repo.
+
 ## Index discipline
 
 Add an entry to `README.md`'s index table on every new report. Format:
@@ -66,4 +94,5 @@ Keep the table sorted newest-first.
 ## Reference reports
 
 - `2026-05-15-pr9362-hfe-write-read-concurrent.html` — 2-target comparison with single profile row, OG meta, colored description.
+- `2026-05-15-pr9362-hfe-evolution.html` — 5-column longitudinal comparison (1 baseline + 4 PR-head commits), every short SHA linked to its GitHub commit.
 - `v8.6.0-to-v8.7.91-regression.html` — 4-version comparison with per-(test,command) profile rows.
