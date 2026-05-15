@@ -1,0 +1,152 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>PR #9362 (HFE fast-path) — search-hfe-write-read-concurrent on oss-cluster-04-primaries-threads-6</title>
+<style>
+  body { font: 14px/1.4 -apple-system, system-ui, sans-serif; color: #222; max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
+  h1 { font-size: 1.3rem; }
+  h2 { font-size: 1.05rem; margin-top: 2rem; }
+  p.note { color: #555; font-size: 13px; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { border: 1px solid #d0d0d0; padding: 6px 10px; vertical-align: middle; text-align: right; }
+  th { background: #f2f2f2; text-align: center; font-weight: 600; }
+  td.cmd, td.met { text-align: left; }
+  td.cmd  { background: #f7f7f7; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 600; }
+  td.met  { color: #444; }
+  td.base { background: #f9f9f9; }
+  .cv      { color: #777; font-size: 12px; }
+  .regress { color: #b00; font-weight: 600; }
+  .improve { color: #0a7d2c; font-weight: 600; }
+  .neutral { color: #777; }
+  tr.cmd-divider td { border-top: 2px solid #888; }
+  code { background: #f3f3f3; padding: 1px 4px; border-radius: 3px; }
+</style>
+<h1>PR #9362 (HFE fast-path refactor) — <code>search-hfe-write-read-concurrent</code></h1>
+<p class="note">
+Topology: <code>oss-cluster-04-primaries-threads-6</code>.
+Workload: <code>memtier -c 16 -t 16 --command-ratio 30/30/40</code> over <code>HEXPIRE</code> / <code>HPERSIST</code> / multi-range <code>FT.SEARCH</code>, 3 min closed-loop, on the 5.2M-doc <code>union-iterators.idx10</code> dataset.<br>
+Targets:
+<code>master = e0262b738fa63ec5d70fb88b02a47a3ae08406af</code>,
+<code>Joan / PR #9362 = a89a0c567f3074465dd29ec30654809a9a6cc2a7</code>.<br>
+3 datapoints per side. Cell format: <b>mean</b> / CV / Δ Joan vs master (signed % change).
+Δ markers: 🟢 improvement (&gt;3% in metric's right direction), 🔴 regression (&gt;3% in wrong direction), ⚪ within ±3% (noise).
+</p>
+<table>
+<thead><tr>
+<th>Command</th>
+<th>Metric</th>
+<th>master</th>
+<th>Joan (PR #9362)</th>
+</tr></thead>
+<tbody>
+
+<tr>
+<td class="cmd" rowspan="4">Totals</td>
+<td class="met">Ops/sec ↑</td>
+<td class="base"><b>102.1</b><br><span class="cv">CV 2.6%</span></td>
+<td><b>104.2</b><br><span class="cv">CV 4.8%</span><br><span class="neutral">⚪ +2.0%</span></td>
+</tr>
+<tr>
+<td class="met">Avg latency ms ↓</td>
+<td class="base"><b>10,036</b><br><span class="cv">CV 1.3%</span></td>
+<td><b>9519.3</b><br><span class="cv">CV 2.3%</span><br><span class="improve">🟢 −5.2%</span></td>
+</tr>
+<tr>
+<td class="met">p99 ms ↓</td>
+<td class="base"><b>78,643</b><br><span class="cv">CV 10.1%</span></td>
+<td><b>106,955</b><br><span class="cv">CV 33.4%</span><br><span class="regress">🔴 +36.0%</span></td>
+</tr>
+<tr>
+<td class="met">p99.9 ms ↓</td>
+<td class="base"><b>102,061</b><br><span class="cv">CV 7.7%</span></td>
+<td><b>167,423</b><br><span class="cv">CV 44.3%</span><br><span class="regress">🔴 +64.0%</span></td>
+</tr>
+<tr class="cmd-divider">
+<td class="cmd" rowspan="4">HEXPIRE</td>
+<td class="met">Ops/sec ↑</td>
+<td class="base"><b>40.11</b><br><span class="cv">CV 2.0%</span></td>
+<td><b>40.84</b><br><span class="cv">CV 3.0%</span><br><span class="neutral">⚪ +1.8%</span></td>
+</tr>
+<tr>
+<td class="met">Avg latency ms ↓</td>
+<td class="base"><b>4.71</b><br><span class="cv">CV 10.6%</span></td>
+<td><b>5.51</b><br><span class="cv">CV 26.5%</span><br><span class="regress">🔴 +17.0%</span></td>
+</tr>
+<tr>
+<td class="met">p99 ms ↓</td>
+<td class="base"><b>36.35</b><br><span class="cv">CV 26.8%</span></td>
+<td><b>43.52</b><br><span class="cv">CV 9.9%</span><br><span class="regress">🔴 +19.7%</span></td>
+</tr>
+<tr>
+<td class="met">p99.9 ms ↓</td>
+<td class="base"><b>66.81</b><br><span class="cv">CV 35.1%</span></td>
+<td><b>89.09</b><br><span class="cv">CV 16.3%</span><br><span class="regress">🔴 +33.3%</span></td>
+</tr>
+<tr class="cmd-divider">
+<td class="cmd" rowspan="4">HPERSIST</td>
+<td class="met">Ops/sec ↑</td>
+<td class="base"><b>40.11</b><br><span class="cv">CV 2.0%</span></td>
+<td><b>40.84</b><br><span class="cv">CV 3.0%</span><br><span class="neutral">⚪ +1.8%</span></td>
+</tr>
+<tr>
+<td class="met">Avg latency ms ↓</td>
+<td class="base"><b>5.41</b><br><span class="cv">CV 6.8%</span></td>
+<td><b>5.04</b><br><span class="cv">CV 18.8%</span><br><span class="improve">🟢 −6.9%</span></td>
+</tr>
+<tr>
+<td class="met">p99 ms ↓</td>
+<td class="base"><b>41.64</b><br><span class="cv">CV 7.3%</span></td>
+<td><b>28.12</b><br><span class="cv">CV 13.0%</span><br><span class="improve">🟢 −32.5%</span></td>
+</tr>
+<tr>
+<td class="met">p99.9 ms ↓</td>
+<td class="base"><b>48.13</b><br><span class="cv">CV 7.2%</span></td>
+<td><b>37.72</b><br><span class="cv">CV 14.1%</span><br><span class="improve">🟢 −21.6%</span></td>
+</tr>
+<tr class="cmd-divider">
+<td class="cmd" rowspan="4">FT.SEARCH</td>
+<td class="met">Ops/sec ↑</td>
+<td class="base"><b>21.91</b><br><span class="cv">CV 6.1%</span></td>
+<td><b>22.54</b><br><span class="cv">CV 11.4%</span><br><span class="neutral">⚪ +2.9%</span></td>
+</tr>
+<tr>
+<td class="met">Avg latency ms ↓</td>
+<td class="base"><b>46,671</b><br><span class="cv">CV 5.2%</span></td>
+<td><b>46,164</b><br><span class="cv">CV 8.6%</span><br><span class="neutral">⚪ −1.1%</span></td>
+</tr>
+<tr>
+<td class="met">p99 ms ↓</td>
+<td class="base"><b>94,896</b><br><span class="cv">CV 6.0%</span></td>
+<td><b>163,054</b><br><span class="cv">CV 45.7%</span><br><span class="regress">🔴 +71.8%</span></td>
+</tr>
+<tr>
+<td class="met">p99.9 ms ↓</td>
+<td class="base"><b>108,353</b><br><span class="cv">CV 9.0%</span></td>
+<td><b>170,743</b><br><span class="cv">CV 43.3%</span><br><span class="regress">🔴 +57.6%</span></td>
+</tr>
+</tbody>
+</table>
+
+<h2>Reading the numbers</h2>
+<ul>
+<li><b>Throughput</b>: Joan delivers small wins across all four streams (~+2% to +3%), but at this magnitude on cluster-04-threads-6 the deltas sit close to the noise floor (master CV 2.0–6.1%, Joan CV 3.0–11.4%).</li>
+<li><b>Tail latencies are mixed and not in Joan's favor on FT.SEARCH / HEXPIRE.</b> Joan's runs show much higher tail variance (Joan p99 CV up to 45% vs master's ≤10%), and the mean p99 / p99.9 are 20–72% above master for FT.SEARCH and HEXPIRE. This is driven by 1 of 3 Joan datapoints having a very long tail — see raw values below. The signal isn't statistically clean at n=3.</li>
+<li><b>HPERSIST tail latency clearly improves on Joan</b>: p99 −32.5%, p99.9 −21.6%, both larger than the CV envelope.</li>
+<li><b>Net assessment</b>: throughput-neutral with possible HPERSIST tail wins; FT.SEARCH/HEXPIRE tail story is inconclusive at n=3 (high Joan CV — needs more datapoints to resolve whether it's a real regression or one bad run).</li>
+</ul>
+
+<h2>Raw datapoints (Ops/sec Totals)</h2>
+<ul>
+<li>master: 99.41 / 102.32 / 104.65</li>
+<li>Joan: 109.10 / 104.45 / 99.07</li>
+</ul>
+
+<h2>Reproducibility</h2>
+<p class="note">
+Result JSONs in S3 under <code>s3://ci.benchmarks.redislabs/RediSearch/RediSearch/results/search-hfe-write-read-concurrent/</code>.<br>
+GH Actions run IDs:
+<ul class="note">
+<li><b>master</b>: 25913544974, 25913546348, 25913543684 (post-cleanup failure but benchmark data uploaded)</li>
+<li><b>Joan / PR #9362</b>: 25913547751, 25913548889, 25913550039</li>
+</ul>
+</p>
+
