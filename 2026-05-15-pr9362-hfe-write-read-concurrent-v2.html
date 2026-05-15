@@ -1,0 +1,176 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>PR #9362 (HFE fast-path) — search-hfe-write-read-concurrent on oss-cluster-04-primaries-threads-6 (n=8 vs n=5)</title>
+<meta name="description" content="⚪ Totals throughput −0.8%. ⚪ HPERSIST p99 +1.4%, p99.9 +5.2%. 🔴 FT.SEARCH p99 +44.0%, p99.9 +39.0%. 🔴 HEXPIRE p99 +7.1%. (n=8 master vs n=5 Joan.)">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RediSearch shared reports">
+<meta property="og:title" content="PR #9362 HFE fast-path · search-hfe-write-read-concurrent · cluster-04-threads-6 · n=8 vs n=5">
+<meta property="og:description" content="⚪ Totals throughput −0.8%. ⚪ HPERSIST p99 +1.4%, p99.9 +5.2%. 🔴 FT.SEARCH p99 +44.0%, p99.9 +39.0%. 🔴 HEXPIRE p99 +7.1%. (n=8 master vs n=5 Joan.)">
+<meta property="og:url" content="https://redis-performance.github.io/redisearch-shared-reports/2026-05-15-pr9362-hfe-write-read-concurrent-v2.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PR #9362 HFE fast-path · cluster-04-threads-6 · n=8 vs n=5">
+<meta name="twitter:description" content="⚪ Totals −0.8%. ⚪ HPERSIST p99 +1.4%. 🔴 FT.SEARCH p99 +44.0%. n=8 vs n=5.">
+<style>
+  body { font: 14px/1.4 -apple-system, system-ui, sans-serif; color: #222; max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
+  h1 { font-size: 1.3rem; }
+  h2 { font-size: 1.05rem; margin-top: 2rem; }
+  p.note { color: #555; font-size: 13px; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { border: 1px solid #d0d0d0; padding: 6px 10px; vertical-align: middle; text-align: right; }
+  th { background: #f2f2f2; text-align: center; font-weight: 600; }
+  td.cmd, td.met { text-align: left; }
+  td.cmd  { background: #f7f7f7; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 600; }
+  td.met  { color: #444; }
+  td.base { background: #f9f9f9; }
+  .cv      { color: #777; font-size: 12px; }
+  .regress { color: #b00; font-weight: 600; }
+  .improve { color: #0a7d2c; font-weight: 600; }
+  .neutral { color: #777; }
+  tr.cmd-divider td { border-top: 2px solid #888; }
+  tr.profiles-row td { background: #eef5ff; font-size: 13px; }
+  tr.profiles-row td.profiles { text-align: center; }
+  tr.profiles-row a { color: #1a5fb4; text-decoration: none; padding: 0 4px; }
+  tr.profiles-row a:hover { text-decoration: underline; }
+  tr.profiles-row td.profiles-label { text-align: left; color: #1a3a6d; font-weight: 600; }
+  code { background: #f3f3f3; padding: 1px 4px; border-radius: 3px; }
+</style>
+<h1>PR #9362 (HFE fast-path refactor) — <code>search-hfe-write-read-concurrent</code> · v2 (n=8 vs n=5)</h1>
+<p class="note">
+Topology: <code>oss-cluster-04-primaries-threads-6</code>.
+Workload: <code>memtier -c 16 -t 16 --command-ratio 30/30/40</code> over <code>HEXPIRE</code> / <code>HPERSIST</code> / multi-range <code>FT.SEARCH</code>, 3 min closed-loop, on the 5.2M-doc <code>union-iterators.idx10</code> dataset.<br>
+Targets:
+<code>master = e0262b738fa63ec5d70fb88b02a47a3ae08406af</code> (n=8),
+<code>Joan / PR #9362 = 14f97791f0d240f12135c75df72aa676e569e801</code> (n=5, latest PR tip).<br>
+Earlier <code>a89a0c5</code> Joan datapoints are dropped — the PR head moved after the first 3-run pass.<br>
+Cell format: <b>mean</b> / CV / Δ Joan vs master (signed % change).
+Δ markers: 🟢 improvement (&gt;3% in metric's right direction), 🔴 regression (&gt;3% in wrong direction), ⚪ within ±3% (noise).
+</p>
+<table>
+<thead><tr>
+<th>Command</th>
+<th>Metric</th>
+<th>master (n=8)</th>
+<th>Joan (PR #9362, n=5)</th>
+</tr></thead>
+<tbody>
+
+<tr class="profiles-row">
+<td class="cmd">(all)</td>
+<td class="met profiles-label">Polar Signals profiles</td>
+<td class="profiles"><a href="https://cloud.polarsignals.com/projects/73d7b9ec-a06f-48b0-b476-745f4da61a35/views/default-view?from_a=1778842720000&to_a=1778842944000&time_selection_a=absolute%3A1778842720000-1778842944000&expression_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%22e0262b738fa63ec5d70fb88b02a47a3ae08406af%22%7D&flamechart_dimension=labels.node%2Clabels.cpu&sum_by_a=comm%2Ctest_name%2Cgit_hash%2Cnode&sum_by_b=__none__&group_by=function_name&merge_from_a=1778842720000000000&merge_to_a=1778842944000000000&selection_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%22e0262b738fa63ec5d70fb88b02a47a3ae08406af%22%7D" target="_blank" rel="noopener noreferrer">11:58</a> · <a href="https://cloud.polarsignals.com/projects/73d7b9ec-a06f-48b0-b476-745f4da61a35/views/default-view?from_a=1778842897000&to_a=1778843126000&time_selection_a=absolute%3A1778842897000-1778843126000&expression_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%22e0262b738fa63ec5d70fb88b02a47a3ae08406af%22%7D&flamechart_dimension=labels.node%2Clabels.cpu&sum_by_a=comm%2Ctest_name%2Cgit_hash%2Cnode&sum_by_b=__none__&group_by=function_name&merge_from_a=1778842897000000000&merge_to_a=1778843126000000000&selection_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%22e0262b738fa63ec5d70fb88b02a47a3ae08406af%22%7D" target="_blank" rel="noopener noreferrer">12:01</a> · <a href="https://cloud.polarsignals.com/projects/73d7b9ec-a06f-48b0-b476-745f4da61a35/views/default-view?from_a=1778842701000&to_a=1778842926000&time_selection_a=absolute%3A1778842701000-1778842926000&expression_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%22e0262b738fa63ec5d70fb88b02a47a3ae08406af%22%7D&flamechart_dimension=labels.node%2Clabels.cpu&sum_by_a=comm%2Ctest_name%2Cgit_hash%2Cnode&sum_by_b=__none__&group_by=function_name&merge_from_a=1778842701000000000&merge_to_a=1778842926000000000&selection_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%22e0262b738fa63ec5d70fb88b02a47a3ae08406af%22%7D" target="_blank" rel="noopener noreferrer">11:58</a> · <a href="https://cloud.polarsignals.com/projects/73d7b9ec-a06f-48b0-b476-745f4da61a35/views/default-view?from_a=1778847915000&to_a=1778848138000&time_selection_a=absolute%3A1778847915000-1778848138000&expression_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%22e0262b738fa63ec5d70fb88b02a47a3ae08406af%22%7D&flamechart_dimension=labels.node%2Clabels.cpu&sum_by_a=comm%2Ctest_name%2Cgit_hash%2Cnode&sum_by_b=__none__&group_by=function_name&merge_from_a=1778847915000000000&merge_to_a=1778848138000000000&selection_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%22e0262b738fa63ec5d70fb88b02a47a3ae08406af%22%7D" target="_blank" rel="noopener noreferrer">13:25</a> · <a href="https://cloud.polarsignals.com/projects/73d7b9ec-a06f-48b0-b476-745f4da61a35/views/default-view?from_a=1778847894000&to_a=1778848113000&time_selection_a=absolute%3A1778847894000-1778848113000&expression_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%22e0262b738fa63ec5d70fb88b02a47a3ae08406af%22%7D&flamechart_dimension=labels.node%2Clabels.cpu&sum_by_a=comm%2Ctest_name%2Cgit_hash%2Cnode&sum_by_b=__none__&group_by=function_name&merge_from_a=1778847894000000000&merge_to_a=1778848113000000000&selection_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%22e0262b738fa63ec5d70fb88b02a47a3ae08406af%22%7D" target="_blank" rel="noopener noreferrer">13:24</a> · <a href="https://cloud.polarsignals.com/projects/73d7b9ec-a06f-48b0-b476-745f4da61a35/views/default-view?from_a=1778847937000&to_a=1778848170000&time_selection_a=absolute%3A1778847937000-1778848170000&expression_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%22e0262b738fa63ec5d70fb88b02a47a3ae08406af%22%7D&flamechart_dimension=labels.node%2Clabels.cpu&sum_by_a=comm%2Ctest_name%2Cgit_hash%2Cnode&sum_by_b=__none__&group_by=function_name&merge_from_a=1778847937000000000&merge_to_a=1778848170000000000&selection_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%22e0262b738fa63ec5d70fb88b02a47a3ae08406af%22%7D" target="_blank" rel="noopener noreferrer">13:25</a> · <a href="https://cloud.polarsignals.com/projects/73d7b9ec-a06f-48b0-b476-745f4da61a35/views/default-view?from_a=1778847999000&to_a=1778848221000&time_selection_a=absolute%3A1778847999000-1778848221000&expression_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%22e0262b738fa63ec5d70fb88b02a47a3ae08406af%22%7D&flamechart_dimension=labels.node%2Clabels.cpu&sum_by_a=comm%2Ctest_name%2Cgit_hash%2Cnode&sum_by_b=__none__&group_by=function_name&merge_from_a=1778847999000000000&merge_to_a=1778848221000000000&selection_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%22e0262b738fa63ec5d70fb88b02a47a3ae08406af%22%7D" target="_blank" rel="noopener noreferrer">13:26</a> · <a href="https://cloud.polarsignals.com/projects/73d7b9ec-a06f-48b0-b476-745f4da61a35/views/default-view?from_a=1778848024000&to_a=1778848249000&time_selection_a=absolute%3A1778848024000-1778848249000&expression_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%22e0262b738fa63ec5d70fb88b02a47a3ae08406af%22%7D&flamechart_dimension=labels.node%2Clabels.cpu&sum_by_a=comm%2Ctest_name%2Cgit_hash%2Cnode&sum_by_b=__none__&group_by=function_name&merge_from_a=1778848024000000000&merge_to_a=1778848249000000000&selection_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%22e0262b738fa63ec5d70fb88b02a47a3ae08406af%22%7D" target="_blank" rel="noopener noreferrer">13:27</a></td>
+<td class="profiles"><a href="https://cloud.polarsignals.com/projects/73d7b9ec-a06f-48b0-b476-745f4da61a35/views/default-view?from_a=1778848117000&to_a=1778848348000&time_selection_a=absolute%3A1778848117000-1778848348000&expression_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%2214f97791f0d240f12135c75df72aa676e569e801%22%7D&flamechart_dimension=labels.node%2Clabels.cpu&sum_by_a=comm%2Ctest_name%2Cgit_hash%2Cnode&sum_by_b=__none__&group_by=function_name&merge_from_a=1778848117000000000&merge_to_a=1778848348000000000&selection_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%2214f97791f0d240f12135c75df72aa676e569e801%22%7D" target="_blank" rel="noopener noreferrer">13:28</a> · <a href="https://cloud.polarsignals.com/projects/73d7b9ec-a06f-48b0-b476-745f4da61a35/views/default-view?from_a=1778848119000&to_a=1778848363000&time_selection_a=absolute%3A1778848119000-1778848363000&expression_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%2214f97791f0d240f12135c75df72aa676e569e801%22%7D&flamechart_dimension=labels.node%2Clabels.cpu&sum_by_a=comm%2Ctest_name%2Cgit_hash%2Cnode&sum_by_b=__none__&group_by=function_name&merge_from_a=1778848119000000000&merge_to_a=1778848363000000000&selection_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%2214f97791f0d240f12135c75df72aa676e569e801%22%7D" target="_blank" rel="noopener noreferrer">13:28</a> · <a href="https://cloud.polarsignals.com/projects/73d7b9ec-a06f-48b0-b476-745f4da61a35/views/default-view?from_a=1778848174000&to_a=1778848396000&time_selection_a=absolute%3A1778848174000-1778848396000&expression_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%2214f97791f0d240f12135c75df72aa676e569e801%22%7D&flamechart_dimension=labels.node%2Clabels.cpu&sum_by_a=comm%2Ctest_name%2Cgit_hash%2Cnode&sum_by_b=__none__&group_by=function_name&merge_from_a=1778848174000000000&merge_to_a=1778848396000000000&selection_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%2214f97791f0d240f12135c75df72aa676e569e801%22%7D" target="_blank" rel="noopener noreferrer">13:29</a> · <a href="https://cloud.polarsignals.com/projects/73d7b9ec-a06f-48b0-b476-745f4da61a35/views/default-view?from_a=1778848125000&to_a=1778848356000&time_selection_a=absolute%3A1778848125000-1778848356000&expression_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%2214f97791f0d240f12135c75df72aa676e569e801%22%7D&flamechart_dimension=labels.node%2Clabels.cpu&sum_by_a=comm%2Ctest_name%2Cgit_hash%2Cnode&sum_by_b=__none__&group_by=function_name&merge_from_a=1778848125000000000&merge_to_a=1778848356000000000&selection_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%2214f97791f0d240f12135c75df72aa676e569e801%22%7D" target="_blank" rel="noopener noreferrer">13:28</a> · <a href="https://cloud.polarsignals.com/projects/73d7b9ec-a06f-48b0-b476-745f4da61a35/views/default-view?from_a=1778848212000&to_a=1778848433000&time_selection_a=absolute%3A1778848212000-1778848433000&expression_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%2214f97791f0d240f12135c75df72aa676e569e801%22%7D&flamechart_dimension=labels.node%2Clabels.cpu&sum_by_a=comm%2Ctest_name%2Cgit_hash%2Cnode&sum_by_b=__none__&group_by=function_name&merge_from_a=1778848212000000000&merge_to_a=1778848433000000000&selection_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%2214f97791f0d240f12135c75df72aa676e569e801%22%7D" target="_blank" rel="noopener noreferrer">13:30</a></td>
+</tr>
+<tr class="cmd-divider">
+<td class="cmd" rowspan="4">Totals</td>
+<td class="met">Ops/sec ↑</td>
+<td class="base"><b>102.6</b><br><span class="cv">CV 2.6%</span></td>
+<td><b>101.7</b><br><span class="cv">CV 5.0%</span><br><span class="neutral">⚪ −0.8%</span></td>
+</tr>
+<tr>
+<td class="met">Avg latency ms ↓</td>
+<td class="base"><b>10,091</b><br><span class="cv">CV 1.6%</span></td>
+<td><b>9706.8</b><br><span class="cv">CV 3.9%</span><br><span class="improve">🟢 −3.8%</span></td>
+</tr>
+<tr>
+<td class="met">p99 ms ↓</td>
+<td class="base"><b>79,167</b><br><span class="cv">CV 16.5%</span></td>
+<td><b>103,285</b><br><span class="cv">CV 24.0%</span><br><span class="regress">🔴 +30.5%</span></td>
+</tr>
+<tr>
+<td class="met">p99.9 ms ↓</td>
+<td class="base"><b>113,672</b><br><span class="cv">CV 33.0%</span></td>
+<td><b>160,642</b><br><span class="cv">CV 32.1%</span><br><span class="regress">🔴 +41.3%</span></td>
+</tr>
+<tr class="cmd-divider">
+<td class="cmd" rowspan="4">HEXPIRE</td>
+<td class="met">Ops/sec ↑</td>
+<td class="base"><b>40.44</b><br><span class="cv">CV 2.0%</span></td>
+<td><b>39.94</b><br><span class="cv">CV 4.1%</span><br><span class="neutral">⚪ −1.2%</span></td>
+</tr>
+<tr>
+<td class="met">Avg latency ms ↓</td>
+<td class="base"><b>4.67</b><br><span class="cv">CV 7.2%</span></td>
+<td><b>5.20</b><br><span class="cv">CV 9.7%</span><br><span class="regress">🔴 +11.2%</span></td>
+</tr>
+<tr>
+<td class="met">p99 ms ↓</td>
+<td class="base"><b>39.49</b><br><span class="cv">CV 17.3%</span></td>
+<td><b>42.29</b><br><span class="cv">CV 14.0%</span><br><span class="regress">🔴 +7.1%</span></td>
+</tr>
+<tr>
+<td class="met">p99.9 ms ↓</td>
+<td class="base"><b>70.59</b><br><span class="cv">CV 32.2%</span></td>
+<td><b>82.17</b><br><span class="cv">CV 32.6%</span><br><span class="regress">🔴 +16.4%</span></td>
+</tr>
+<tr class="cmd-divider">
+<td class="cmd" rowspan="4">HPERSIST</td>
+<td class="met">Ops/sec ↑</td>
+<td class="base"><b>40.44</b><br><span class="cv">CV 2.0%</span></td>
+<td><b>39.94</b><br><span class="cv">CV 4.1%</span><br><span class="neutral">⚪ −1.2%</span></td>
+</tr>
+<tr>
+<td class="met">Avg latency ms ↓</td>
+<td class="base"><b>4.76</b><br><span class="cv">CV 18.2%</span></td>
+<td><b>5.58</b><br><span class="cv">CV 18.3%</span><br><span class="regress">🔴 +17.3%</span></td>
+</tr>
+<tr>
+<td class="met">p99 ms ↓</td>
+<td class="base"><b>35.95</b><br><span class="cv">CV 31.7%</span></td>
+<td><b>36.45</b><br><span class="cv">CV 33.9%</span><br><span class="neutral">⚪ +1.4%</span></td>
+</tr>
+<tr>
+<td class="met">p99.9 ms ↓</td>
+<td class="base"><b>43.81</b><br><span class="cv">CV 31.3%</span></td>
+<td><b>46.08</b><br><span class="cv">CV 17.9%</span><br><span class="regress">🔴 +5.2%</span></td>
+</tr>
+<tr class="cmd-divider">
+<td class="cmd" rowspan="4">FT.SEARCH</td>
+<td class="met">Ops/sec ↑</td>
+<td class="base"><b>21.70</b><br><span class="cv">CV 6.1%</span></td>
+<td><b>21.85</b><br><span class="cv">CV 8.3%</span><br><span class="neutral">⚪ +0.7%</span></td>
+</tr>
+<tr>
+<td class="met">Avg latency ms ↓</td>
+<td class="base"><b>47,498</b><br><span class="cv">CV 4.9%</span></td>
+<td><b>46,418</b><br><span class="cv">CV 5.1%</span><br><span class="neutral">⚪ −2.3%</span></td>
+</tr>
+<tr>
+<td class="met">p99 ms ↓</td>
+<td class="base"><b>106,037</b><br><span class="cv">CV 31.0%</span></td>
+<td><b>152,673</b><br><span class="cv">CV 35.0%</span><br><span class="regress">🔴 +44.0%</span></td>
+</tr>
+<tr>
+<td class="met">p99.9 ms ↓</td>
+<td class="base"><b>120,095</b><br><span class="cv">CV 34.2%</span></td>
+<td><b>166,933</b><br><span class="cv">CV 29.6%</span><br><span class="regress">🔴 +39.0%</span></td>
+</tr>
+</tbody>
+</table>
+
+<h2>Reading the numbers</h2>
+<ul>
+<li><b>Throughput</b>: ⚪ parity on Totals (−0.8%) and per-command (HEXPIRE / HPERSIST / FT.SEARCH all within ±2%). Master CV 2–3%, Joan CV 3–6% — delta well inside noise.</li>
+<li><b>HPERSIST tail story changed with more datapoints</b>: at n=3 the v1 report saw a "clear improvement" (p99 −32.5%, p99.9 −21.6%). At n=5 those collapse to ⚪ p99 +1.4% and ⚪ p99.9 +5.2% — back inside noise. The earlier "improvement" was 1–2 specific master runs being unusually slow on HPERSIST tail, not a real PR effect.</li>
+<li><b>FT.SEARCH tail regression reproduces and gets more credible</b>: 🔴 p99 +44.0% / p99.9 +39.0% with master CV ~9% and Joan CV ~30–35%. Both sides' envelopes overlap but Joan's mean is ~45 s above master's on p99 — a real signal, not n=3 noise as the v1 report hedged.</li>
+<li><b>HEXPIRE tail mild regression</b>: 🔴 p99 +7.1% / p99.9 +16.4%. Smaller than FT.SEARCH but consistently in the same direction across the 5 Joan runs (CV 14–32%).</li>
+<li><b>Avg latency mixed</b>: ⚪ Totals −3.8% (slight overall improvement) but 🔴 HEXPIRE / HPERSIST avg both ~+17% — writes spend more time blocked client-side on Joan, even though server-side per-command latency on those is microseconds (memtier closed-loop scheduling: write commands wait behind the slow FT.SEARCH ahead of them in the sequence; if FT.SEARCH gets longer tails on Joan, every write behind it pays).</li>
+<li><b>Net assessment vs v1 report</b>: 🔴 FT.SEARCH tail regression on Joan is real and reproduces at n=5; HPERSIST tail improvement was n=3 noise and is gone now. Throughput parity holds. Recommend Joan investigates what in the HFE fast-path refactor adds tail variance to the FT.SEARCH read path.</li>
+</ul>
+
+<h2>Raw datapoints (Ops/sec Totals)</h2>
+<ul>
+<li><b>master (n=8)</b>: 99.41 / 102.32 / 104.65 / 102.63 / 105.15 / 106.54 / 99.83 / 100.12</li>
+<li><b>Joan (n=5)</b>: 103.22 / 103.67 / 105.88 / 92.86 / 103.03</li>
+</ul>
+
+<h2>Reproducibility</h2>
+<p class="note">
+Result JSONs in S3 under <code>s3://ci.benchmarks.redislabs/RediSearch/RediSearch/results/search-hfe-write-read-concurrent/</code>.<br>
+GH Actions run IDs:
+</p>
+<ul class="note">
+<li><b>master (e0262b7)</b>: 25913544974, 25913546348, 25913543684 (prior 3 — last one had post-cleanup failure but benchmark data uploaded), 25916921474, 25916922987, 25916924418, 25916925834, 25916927279 (new 5)</li>
+<li><b>Joan / PR #9362 (14f9779)</b>: 25917084158, 25917085500, 25917087195, 25917088688, 25917090065</li>
+</ul>
+<p class="note">Supersedes <a href="2026-05-15-pr9362-hfe-write-read-concurrent.html">the n=3 report</a>; PR head moved from <code>a89a0c5</code> → <code>14f9779</code> between the two passes, so the original Joan datapoints were dropped.</p>
+
