@@ -1,6 +1,16 @@
 <!doctype html>
 <meta charset="utf-8">
 <title>PR #9362 (HFE fast-path) — search-hfe-write-read-concurrent on oss-cluster-04-primaries-threads-6</title>
+<meta name="description" content="PR #9362 HFE fast-path on cluster-04-threads-6: ~+2% throughput. HPERSIST tail clearly improves (p99 −32.5%, p99.9 −21.6%). FT.SEARCH and HEXPIRE tail story inconclusive at n=3 — Joan p99 CV 33–46% vs master ≤10%, driven by one long-tail run. Needs more datapoints.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RediSearch shared reports">
+<meta property="og:title" content="PR #9362 HFE fast-path · search-hfe-write-read-concurrent · cluster-04-threads-6">
+<meta property="og:description" content="~+2% throughput. HPERSIST tail clearly improves (p99 −32.5%, p99.9 −21.6%). FT.SEARCH/HEXPIRE tail inconclusive at n=3 — Joan p99 CV 33–46%, driven by one long-tail run. Needs more datapoints.">
+<meta property="og:url" content="https://redis-performance.github.io/redisearch-shared-reports/2026-05-15-pr9362-hfe-write-read-concurrent.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PR #9362 HFE fast-path · search-hfe-write-read-concurrent · cluster-04-threads-6">
+<meta name="twitter:description" content="~+2% throughput. HPERSIST tail clearly improves (p99 −32.5%, p99.9 −21.6%). FT.SEARCH/HEXPIRE tail inconclusive at n=3 — needs more datapoints.">
+
 <style>
   body { font: 14px/1.4 -apple-system, system-ui, sans-serif; color: #222; max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
   h1 { font-size: 1.3rem; }
