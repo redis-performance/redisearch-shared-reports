@@ -18,6 +18,11 @@
   .improve { color: #0a7d2c; font-weight: 600; }
   .neutral { color: #777; }
   tr.cmd-divider td { border-top: 2px solid #888; }
+  tr.profiles-row td { background: #eef5ff; font-size: 13px; }
+  tr.profiles-row td.profiles { text-align: center; }
+  tr.profiles-row a { color: #1a5fb4; text-decoration: none; padding: 0 4px; }
+  tr.profiles-row a:hover { text-decoration: underline; }
+  tr.profiles-row td.profiles-label { text-align: left; color: #1a3a6d; font-weight: 600; }
   code { background: #f3f3f3; padding: 1px 4px; border-radius: 3px; }
 </style>
 <h1>PR #9362 (HFE fast-path refactor) — <code>search-hfe-write-read-concurrent</code></h1>
@@ -39,7 +44,13 @@ Targets:
 </tr></thead>
 <tbody>
 
-<tr>
+<tr class="profiles-row">
+<td class="cmd">(all)</td>
+<td class="met profiles-label">Polar Signals profiles</td>
+<td class="profiles"><a href="https://cloud.polarsignals.com/projects/73d7b9ec-a06f-48b0-b476-745f4da61a35/views/default-view?from_a=1778842720000&to_a=1778842944000&time_selection_a=absolute%3A1778842720000-1778842944000&expression_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%22e0262b738fa63ec5d70fb88b02a47a3ae08406af%22%7D&flamechart_dimension=labels.node%2Clabels.cpu&sum_by_a=comm%2Ctest_name%2Cgit_hash%2Cnode&sum_by_b=__none__&group_by=function_name&merge_from_a=1778842720000000000&merge_to_a=1778842944000000000&selection_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%22e0262b738fa63ec5d70fb88b02a47a3ae08406af%22%7D" target="_blank" rel="noopener noreferrer">11:58</a> · <a href="https://cloud.polarsignals.com/projects/73d7b9ec-a06f-48b0-b476-745f4da61a35/views/default-view?from_a=1778842897000&to_a=1778843126000&time_selection_a=absolute%3A1778842897000-1778843126000&expression_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%22e0262b738fa63ec5d70fb88b02a47a3ae08406af%22%7D&flamechart_dimension=labels.node%2Clabels.cpu&sum_by_a=comm%2Ctest_name%2Cgit_hash%2Cnode&sum_by_b=__none__&group_by=function_name&merge_from_a=1778842897000000000&merge_to_a=1778843126000000000&selection_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%22e0262b738fa63ec5d70fb88b02a47a3ae08406af%22%7D" target="_blank" rel="noopener noreferrer">12:01</a> · <a href="https://cloud.polarsignals.com/projects/73d7b9ec-a06f-48b0-b476-745f4da61a35/views/default-view?from_a=1778842701000&to_a=1778842926000&time_selection_a=absolute%3A1778842701000-1778842926000&expression_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%22e0262b738fa63ec5d70fb88b02a47a3ae08406af%22%7D&flamechart_dimension=labels.node%2Clabels.cpu&sum_by_a=comm%2Ctest_name%2Cgit_hash%2Cnode&sum_by_b=__none__&group_by=function_name&merge_from_a=1778842701000000000&merge_to_a=1778842926000000000&selection_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%22e0262b738fa63ec5d70fb88b02a47a3ae08406af%22%7D" target="_blank" rel="noopener noreferrer">11:58</a></td>
+<td class="profiles"><a href="https://cloud.polarsignals.com/projects/73d7b9ec-a06f-48b0-b476-745f4da61a35/views/default-view?from_a=1778842687000&to_a=1778842908000&time_selection_a=absolute%3A1778842687000-1778842908000&expression_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%22a89a0c567f3074465dd29ec30654809a9a6cc2a7%22%7D&flamechart_dimension=labels.node%2Clabels.cpu&sum_by_a=comm%2Ctest_name%2Cgit_hash%2Cnode&sum_by_b=__none__&group_by=function_name&merge_from_a=1778842687000000000&merge_to_a=1778842908000000000&selection_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%22a89a0c567f3074465dd29ec30654809a9a6cc2a7%22%7D" target="_blank" rel="noopener noreferrer">11:58</a> · <a href="https://cloud.polarsignals.com/projects/73d7b9ec-a06f-48b0-b476-745f4da61a35/views/default-view?from_a=1778842706000&to_a=1778842947000&time_selection_a=absolute%3A1778842706000-1778842947000&expression_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%22a89a0c567f3074465dd29ec30654809a9a6cc2a7%22%7D&flamechart_dimension=labels.node%2Clabels.cpu&sum_by_a=comm%2Ctest_name%2Cgit_hash%2Cnode&sum_by_b=__none__&group_by=function_name&merge_from_a=1778842706000000000&merge_to_a=1778842947000000000&selection_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%22a89a0c567f3074465dd29ec30654809a9a6cc2a7%22%7D" target="_blank" rel="noopener noreferrer">11:58</a> · <a href="https://cloud.polarsignals.com/projects/73d7b9ec-a06f-48b0-b476-745f4da61a35/views/default-view?from_a=1778842971000&to_a=1778843207000&time_selection_a=absolute%3A1778842971000-1778843207000&expression_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%22a89a0c567f3074465dd29ec30654809a9a6cc2a7%22%7D&flamechart_dimension=labels.node%2Clabels.cpu&sum_by_a=comm%2Ctest_name%2Cgit_hash%2Cnode&sum_by_b=__none__&group_by=function_name&merge_from_a=1778842971000000000&merge_to_a=1778843207000000000&selection_a=parca_agent%3Asamples%3Acount%3Acpu%3Ananoseconds%3Adelta%7Btest_name%3D%22search-hfe-write-read-concurrent%22%2Cgit_hash%3D%22a89a0c567f3074465dd29ec30654809a9a6cc2a7%22%7D" target="_blank" rel="noopener noreferrer">12:02</a></td>
+</tr>
+<tr class="cmd-divider">
 <td class="cmd" rowspan="4">Totals</td>
 <td class="met">Ops/sec ↑</td>
 <td class="base"><b>102.1</b><br><span class="cv">CV 2.6%</span></td>
@@ -144,9 +155,9 @@ Targets:
 <p class="note">
 Result JSONs in S3 under <code>s3://ci.benchmarks.redislabs/RediSearch/RediSearch/results/search-hfe-write-read-concurrent/</code>.<br>
 GH Actions run IDs:
+</p>
 <ul class="note">
 <li><b>master</b>: 25913544974, 25913546348, 25913543684 (post-cleanup failure but benchmark data uploaded)</li>
 <li><b>Joan / PR #9362</b>: 25913547751, 25913548889, 25913550039</li>
 </ul>
-</p>
 
