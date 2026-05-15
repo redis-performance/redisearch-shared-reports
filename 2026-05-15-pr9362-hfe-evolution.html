@@ -38,7 +38,7 @@
 <h1>PR #9362 (HFE fast-path refactor) — 4-commit evolution on <code>oss-cluster-04-primaries-threads-6</code></h1>
 <p class="note">
 Workload: <code>search-hfe-write-read-concurrent</code> · <code>memtier -c 16 -t 16 --command-ratio 30/30/40</code> over <code>HEXPIRE</code> / <code>HPERSIST</code> / multi-range <code>FT.SEARCH</code>, 3 min closed-loop, on the 5.2M-doc <code>union-iterators.idx10</code> dataset.<br>
-Master pinned at <code>e0262b73</code> (n=8) across all four Joan passes. Joan PR head moved <code>a89a0c5 → 14f9779 → 79b85e5 → 88ef9b2</code> across the same workday.<br>
+Master pinned at <code><a href="https://github.com/RediSearch/RediSearch/commit/e0262b738fa63ec5d70fb88b02a47a3ae08406af" target="_blank" rel="noopener noreferrer">e0262b73</a></code> (n=8) across all four Joan passes. Joan PR head moved <code><a href="https://github.com/RediSearch/RediSearch/commit/a89a0c567f3074465dd29ec30654809a9a6cc2a7" target="_blank" rel="noopener noreferrer">a89a0c5</a> → <a href="https://github.com/RediSearch/RediSearch/commit/14f97791f0d240f12135c75df72aa676e569e801" target="_blank" rel="noopener noreferrer">14f9779</a> → <a href="https://github.com/RediSearch/RediSearch/commit/79b85e5d06523af8f44131308f5346cbeae2aced" target="_blank" rel="noopener noreferrer">79b85e5</a> → <a href="https://github.com/RediSearch/RediSearch/commit/88ef9b2b6af281c7300e5a95ed7dc304c35204ac" target="_blank" rel="noopener noreferrer">88ef9b2</a></code> across the same workday.<br>
 <b>Effective n per Joan column</b>: v1 = 3, v2 = 5, v3 = 3 (5 dispatched, 2 lost to S3 filename collision), v4 = 4 (5 dispatched, 1 lost to S3 filename collision). Master n=8.<br>
 Cell format: <b>mean</b> / CV / Δ vs master (signed % change).
 Δ markers: 🟢 improvement (&gt;3% in metric's right direction), 🔴 regression (&gt;3% in wrong direction), ⚪ within ±3% (noise).
@@ -48,11 +48,11 @@ Cell format: <b>mean</b> / CV / Δ vs master (signed % change).
 <tr>
 <th>Command</th>
 <th>Metric</th>
-<th>master<br><small>e0262b7 · n=8</small></th>
-<th>Joan v1<br><small>a89a0c5 · n=3</small></th>
-<th>Joan v2<br><small>14f9779 · n=5</small></th>
-<th>Joan v3<br><small>79b85e5 · n=3</small></th>
-<th>Joan v4<br><small>88ef9b2 · n=4</small></th>
+<th>master<br><small><a href="https://github.com/RediSearch/RediSearch/commit/e0262b738fa63ec5d70fb88b02a47a3ae08406af" target="_blank" rel="noopener noreferrer">e0262b7</a> · n=8</small></th>
+<th>Joan v1<br><small><a href="https://github.com/RediSearch/RediSearch/commit/a89a0c567f3074465dd29ec30654809a9a6cc2a7" target="_blank" rel="noopener noreferrer">a89a0c5</a> · n=3</small></th>
+<th>Joan v2<br><small><a href="https://github.com/RediSearch/RediSearch/commit/14f97791f0d240f12135c75df72aa676e569e801" target="_blank" rel="noopener noreferrer">14f9779</a> · n=5</small></th>
+<th>Joan v3<br><small><a href="https://github.com/RediSearch/RediSearch/commit/79b85e5d06523af8f44131308f5346cbeae2aced" target="_blank" rel="noopener noreferrer">79b85e5</a> · n=3</small></th>
+<th>Joan v4<br><small><a href="https://github.com/RediSearch/RediSearch/commit/88ef9b2b6af281c7300e5a95ed7dc304c35204ac" target="_blank" rel="noopener noreferrer">88ef9b2</a> · n=4</small></th>
 </tr>
 </thead>
 <tbody>
@@ -213,17 +213,17 @@ Cell format: <b>mean</b> / CV / Δ vs master (signed % change).
 <h2>Raw datapoints (Ops/sec Totals)</h2>
 <ul>
 <li><b>master</b>: 99.41 / 102.32 / 104.65 / 102.63 / 105.15 / 106.54 / 99.83 / 100.12</li>
-<li><b>Joan v1 (a89a0c5)</b>: 109.10 / 104.45 / 99.07</li>
-<li><b>Joan v2 (14f9779)</b>: 103.22 / 103.67 / 105.88 / 92.86 / 103.03</li>
-<li><b>Joan v3 (79b85e5)</b>: 97.70 / 99.40 / 104.31 <span class="cv">(2 of 5 S3 JSONs were duplicates from filename collision — 3 unique used)</span></li>
-<li><b>Joan v4 (88ef9b2)</b>: 106.13 / 105.18 / 100.17 / 101.15 <span class="cv">(1 of 5 S3 JSONs was a duplicate — 4 unique used)</span></li>
+<li><b>Joan v1 (<a href="https://github.com/RediSearch/RediSearch/commit/a89a0c567f3074465dd29ec30654809a9a6cc2a7" target="_blank" rel="noopener noreferrer">a89a0c5</a>)</b>: 109.10 / 104.45 / 99.07</li>
+<li><b>Joan v2 (<a href="https://github.com/RediSearch/RediSearch/commit/14f97791f0d240f12135c75df72aa676e569e801" target="_blank" rel="noopener noreferrer">14f9779</a>)</b>: 103.22 / 103.67 / 105.88 / 92.86 / 103.03</li>
+<li><b>Joan v3 (<a href="https://github.com/RediSearch/RediSearch/commit/79b85e5d06523af8f44131308f5346cbeae2aced" target="_blank" rel="noopener noreferrer">79b85e5</a>)</b>: 97.70 / 99.40 / 104.31 <span class="cv">(2 of 5 S3 JSONs were duplicates from filename collision — 3 unique used)</span></li>
+<li><b>Joan v4 (<a href="https://github.com/RediSearch/RediSearch/commit/88ef9b2b6af281c7300e5a95ed7dc304c35204ac" target="_blank" rel="noopener noreferrer">88ef9b2</a>)</b>: 106.13 / 105.18 / 100.17 / 101.15 <span class="cv">(1 of 5 S3 JSONs was a duplicate — 4 unique used)</span></li>
 </ul>
 
 <h2>Individual reports</h2>
 <ul>
-<li><a href="2026-05-15-pr9362-hfe-write-read-concurrent.html">v1 (a89a0c5, n=3)</a> — first pass, called out the FT.SEARCH tail regression but cautioned it might be n=3 noise</li>
-<li><a href="2026-05-15-pr9362-hfe-write-read-concurrent-v2.html">v2 (14f9779, n=5)</a> — confirmed FT.SEARCH tail regression credible at higher n</li>
-<li><a href="2026-05-15-pr9362-hfe-write-read-concurrent-v3.html">v3 (79b85e5, n=5)</a> — regression flipped; FT.SEARCH tail now improved (note: v3 also has the S3 collision issue, effective n=3)</li>
-<li><a href="2026-05-15-pr9362-hfe-write-read-concurrent-v4.html">v4 (88ef9b2, n=4)</a> — improvement holds and gets larger; v2 regression remains absent</li>
+<li><a href="2026-05-15-pr9362-hfe-write-read-concurrent.html">v1 (<a href="https://github.com/RediSearch/RediSearch/commit/a89a0c567f3074465dd29ec30654809a9a6cc2a7" target="_blank" rel="noopener noreferrer">a89a0c5</a>, n=3)</a> — first pass, called out the FT.SEARCH tail regression but cautioned it might be n=3 noise</li>
+<li><a href="2026-05-15-pr9362-hfe-write-read-concurrent-v2.html">v2 (<a href="https://github.com/RediSearch/RediSearch/commit/14f97791f0d240f12135c75df72aa676e569e801" target="_blank" rel="noopener noreferrer">14f9779</a>, n=5)</a> — confirmed FT.SEARCH tail regression credible at higher n</li>
+<li><a href="2026-05-15-pr9362-hfe-write-read-concurrent-v3.html">v3 (<a href="https://github.com/RediSearch/RediSearch/commit/79b85e5d06523af8f44131308f5346cbeae2aced" target="_blank" rel="noopener noreferrer">79b85e5</a>, n=5)</a> — regression flipped; FT.SEARCH tail now improved (note: v3 also has the S3 collision issue, effective n=3)</li>
+<li><a href="2026-05-15-pr9362-hfe-write-read-concurrent-v4.html">v4 (<a href="https://github.com/RediSearch/RediSearch/commit/88ef9b2b6af281c7300e5a95ed7dc304c35204ac" target="_blank" rel="noopener noreferrer">88ef9b2</a>, n=4)</a> — improvement holds and gets larger; v2 regression remains absent</li>
 </ul>
 
