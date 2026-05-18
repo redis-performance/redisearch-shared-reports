@@ -1,15 +1,15 @@
 <!doctype html>
 <meta charset="utf-8">
 <title>RediSearch 8.6.7 to 8.8.0 release-tag benchmark compare</title>
-<meta name="description" content="RediSearch release-tag benchmark comparison: 80607 vs 80800 on oss-standalone x86_64. One confirmed regression, four unstable rows, eleven improvements; includes a focused 5x rerun for the numeric outliers.">
+<meta name="description" content="RediSearch release-tag benchmark comparison: 80607 vs 80800 on oss-standalone x86_64. One confirmed regression, fifteen improvements including four improvements from unstable runs, plus validation reruns for unstable numeric benchmarks.">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="RediSearch shared reports">
 <meta property="og:title" content="RediSearch 8.6.7 to 8.8.0 release-tag benchmark compare">
-<meta property="og:description" content="80607 vs 80800 on oss-standalone x86_64: one confirmed regression, four unstable rows, eleven improvements, plus a focused 5x numeric rerun.">
+<meta property="og:description" content="80607 vs 80800 on oss-standalone x86_64: one confirmed regression, fifteen improvements including four improvements from unstable runs, plus validation reruns for unstable numeric benchmarks.">
 <meta property="og:url" content="https://redis-performance.github.io/redisearch-shared-reports/compare-80607-vs-80800-release-tags.html">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="RediSearch 8.6.7 to 8.8.0 release-tag benchmark compare">
-<meta name="twitter:description" content="80607 vs 80800 on oss-standalone x86_64: one confirmed regression, four unstable rows, eleven improvements, plus a focused 5x numeric rerun.">
+<meta name="twitter:description" content="80607 vs 80800 on oss-standalone x86_64: one confirmed regression, fifteen improvements including four improvements from unstable runs, plus validation reruns for unstable numeric benchmarks.">
 <style>
   body { font: 14px/1.4 -apple-system, system-ui, sans-serif; color: #222; max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
   h1 { font-size: 1.35rem; margin-bottom: .5rem; }
@@ -61,17 +61,17 @@ Sample policy: latest 5 samples per time series, regression waterline 12%.
 </table>
 
 <div class="summary">
-  <div class="metric"><b>11</b><span>improvements above waterline</span></div>
+  <div class="metric"><b>15</b><span>improvements above waterline</span></div>
   <div class="metric"><b>1</b><span>confirmed regression</span></div>
-  <div class="metric"><b>4</b><span>unstable / insufficient-evidence rows</span></div>
+  <div class="metric"><b>4</b><span>improvements from unstable runs</span></div>
   <div class="metric"><b>19/19</b><span>report rows with values</span></div>
 </div>
 
 <h2>Reading The Report</h2>
 <ul class="note">
 <li>The only confirmed regression is the enwiki abstract HASH GC workload. It is a throughput drop, not just a noisy row.</li>
-<li>The two apparent positive-throughput outliers in the issues table are marked unstable because baseline variance is high and latency validation is not consistent enough to treat them as confirmed regressions. A focused 5x rerun is included below.</li>
-<li>The largest improvements are mostly numeric/vector query paths and JSON numeric workloads, but most comparison rows only have one 80800 datapoint.</li>
+<li>When the throughput change clearly exceeds sample variance, the row is classified by direction and marked unstable as a confidence qualifier.</li>
+<li>The largest improvements are mostly numeric/vector query paths and JSON numeric workloads; improvements from unstable runs keep their variance and latency caveats in the note.</li>
 <li>The four originally stale rows were refreshed with the same topology and architecture filters.</li>
 </ul>
 
@@ -86,60 +86,7 @@ Sample policy: latest 5 samples per time series, regression waterline 12%.
   <td><span class='regress'>-53.6%</span></td>
   <td class='note'>REGRESSION</td>
 </tr>
-<tr class='unstable'>
-  <td class='test'><a href='https://benchmarksrediscom.grafana.net/d//3Ejv2wZnk?var-test_case=search-numeric&amp;var-github_org=RediSearch&amp;var-github_repo=RediSearch&amp;var-version=80607&amp;var-version=80800&amp;from=now-30d&amp;to=now' target='_blank' rel='noopener noreferrer'>search-numeric</a></td>
-  <td>2442 +- 24.6% UNSTABLE (5 datapoints)</td>
-  <td>19281</td>
-  <td><span class='unstable'>689.7%</span></td>
-  <td class='note'>UNSTABLE (baseline high variance); server: FT.SEARCH p50 increased 17.3% (baseline CV=18.2%); client: Latency decreased 87.3% (baseline CV=17.6%); only server side confirms regression (client side stable) - insufficient evidence</td>
-</tr>
-<tr class='unstable'>
-  <td class='test'><a href='https://benchmarksrediscom.grafana.net/d//3Ejv2wZnk?var-test_case=search-filtering-tag-numeric&amp;var-github_org=RediSearch&amp;var-github_repo=RediSearch&amp;var-version=80607&amp;var-version=80800&amp;from=now-30d&amp;to=now' target='_blank' rel='noopener noreferrer'>search-filtering-tag-numeric</a></td>
-  <td>296 +- 12.7% UNSTABLE (4 datapoints)</td>
-  <td>4554</td>
-  <td><span class='unstable'>1438.5%</span></td>
-  <td class='note'>UNSTABLE (baseline high variance); server: FT.AGGREGATE p50 increased 35.6% (baseline CV=11.1%); client: Latency decreased 93.5% (baseline CV=11.1%); only server side confirms regression (client side stable) - insufficient evidence</td>
-</tr>
-<tr class='unstable'>
-  <td class='test'><a href='https://benchmarksrediscom.grafana.net/d//3Ejv2wZnk?var-test_case=search-numeric-sortby-desc&amp;var-github_org=RediSearch&amp;var-github_repo=RediSearch&amp;var-version=80607&amp;var-version=80800&amp;from=now-30d&amp;to=now' target='_blank' rel='noopener noreferrer'>search-numeric-sortby-desc</a></td>
-  <td>2347 +- 41.2% UNSTABLE (3 datapoints)</td>
-  <td>17309 +- 15.7% UNSTABLE (2 datapoints)</td>
-  <td><span class='unstable'>637.4%</span></td>
-  <td class='note'>UNSTABLE (baseline &amp; comparison high variance); server: FT.SEARCH p50 increased 38.2% (baseline CV=29.0%); client: Latency decreased 86.3% (baseline CV=28.3%); only server side confirms regression (client side stable) - insufficient evidence</td>
-</tr>
-<tr class='unstable'>
-  <td class='test'><a href='https://benchmarksrediscom.grafana.net/d//3Ejv2wZnk?var-test_case=search-numeric-sortby-desc-optimize&amp;var-github_org=RediSearch&amp;var-github_repo=RediSearch&amp;var-version=80607&amp;var-version=80800&amp;from=now-30d&amp;to=now' target='_blank' rel='noopener noreferrer'>search-numeric-sortby-desc-optimize</a></td>
-  <td>28 +- 12.5% UNSTABLE (3 datapoints)</td>
-  <td>514</td>
-  <td><span class='unstable'>1761.4%</span></td>
-  <td class='note'>UNSTABLE (baseline high variance); server: FT.SEARCH p50 increased 71.0% (baseline CV=11.6%); client: Latency decreased 94.6% (baseline CV=11.3%); only server side confirms regression (client side stable) - insufficient evidence</td>
-</tr>
 </tbody></table>
-<h2>Focused Numeric Rerun</h2>
-<p class="note">
-The two unstable numeric rows were rerun 5x per ref on May 18, 2026. The focused comparison uses branch labels
-<code>historical-3020486</code> (8.6.7) and <code>historical-dde8e68</code> (8.8.0), and the same
-<code>oss-standalone</code> / <code>x86_64</code> filters.
-</p>
-<table>
-<thead><tr><th>Test</th><th>8.6.7 rerun</th><th>8.8.0 rerun</th><th>Throughput change</th><th>Latency validation</th></tr></thead>
-<tbody>
-<tr class="unstable">
-  <td class="test"><a href="https://benchmarksrediscom.grafana.net/d//3Ejv2wZnk?var-test_case=search-numeric&amp;var-github_org=RediSearch&amp;var-github_repo=RediSearch&amp;var-branch=historical-3020486&amp;var-branch=historical-dde8e68&amp;from=now-30d&amp;to=now" target="_blank" rel="noopener noreferrer">search-numeric</a></td>
-  <td>4484 +- 14.8% UNSTABLE (5 datapoints)</td>
-  <td>15330 +- 7.0% (5 datapoints)</td>
-  <td><span class="unstable">+241.9%</span></td>
-  <td class="note">Server p50 FT.SEARCH increased 214.7%; client Latency decreased 70.2%. Only server side confirms a regression, so this remains insufficient evidence.</td>
-</tr>
-<tr class="unstable">
-  <td class="test"><a href="https://benchmarksrediscom.grafana.net/d//3Ejv2wZnk?var-test_case=search-filtering-tag-numeric&amp;var-github_org=RediSearch&amp;var-github_repo=RediSearch&amp;var-branch=historical-3020486&amp;var-branch=historical-dde8e68&amp;from=now-30d&amp;to=now" target="_blank" rel="noopener noreferrer">search-filtering-tag-numeric</a></td>
-  <td>305 +- 11.7% UNSTABLE (5 datapoints)</td>
-  <td>3668 +- 10.1% UNSTABLE (5 datapoints)</td>
-  <td><span class="unstable">+1103.9%</span></td>
-  <td class="note">Server p50 FT.AGGREGATE increased 71.3%; client Latency decreased 91.7%. Only server side confirms a regression, so this remains insufficient evidence.</td>
-</tr>
-</tbody>
-</table>
 <h2>Performance Improvements</h2>
 <table>
 <thead><tr><th>Test</th><th>Baseline 80607</th><th>Comparison 80800</th><th>Change</th><th>Note</th></tr></thead>
@@ -159,11 +106,25 @@ The two unstable numeric rows were rerun 5x per ref on May 18, 2026. The focused
   <td class='note'>IMPROVEMENT</td>
 </tr>
 <tr class='improve'>
+  <td class='test'><a href='https://benchmarksrediscom.grafana.net/d//3Ejv2wZnk?var-test_case=search-numeric-sortby-desc-optimize&amp;var-github_org=RediSearch&amp;var-github_repo=RediSearch&amp;var-version=80607&amp;var-version=80800&amp;from=now-30d&amp;to=now' target='_blank' rel='noopener noreferrer'>search-numeric-sortby-desc-optimize</a></td>
+  <td>28 +- 12.5% UNSTABLE (3 datapoints)</td>
+  <td>514</td>
+  <td><span class='improve'>1761.4%</span></td>
+  <td class='note'>IMPROVEMENT; run is unstable (baseline high variance); server: FT.SEARCH p50 increased 71.0% (baseline CV=11.6%); client: Latency decreased 94.6% (baseline CV=11.3%)</td>
+</tr>
+<tr class='improve'>
   <td class='test'><a href='https://benchmarksrediscom.grafana.net/d//3Ejv2wZnk?var-test_case=search-high-cardinality-negation-term-comparison_union_all_other_terms&amp;var-github_org=RediSearch&amp;var-github_repo=RediSearch&amp;var-version=80607&amp;var-version=80800&amp;from=now-30d&amp;to=now' target='_blank' rel='noopener noreferrer'>search-high-cardinality-negation-term-comparison_union_all_other_terms</a></td>
   <td>13 +- 3.1% (5 datapoints)</td>
   <td>205</td>
   <td><span class='improve'>1490.5%</span></td>
   <td class='note'>IMPROVEMENT</td>
+</tr>
+<tr class='improve'>
+  <td class='test'><a href='https://benchmarksrediscom.grafana.net/d//3Ejv2wZnk?var-test_case=search-filtering-tag-numeric&amp;var-github_org=RediSearch&amp;var-github_repo=RediSearch&amp;var-version=80607&amp;var-version=80800&amp;from=now-30d&amp;to=now' target='_blank' rel='noopener noreferrer'>search-filtering-tag-numeric</a></td>
+  <td>296 +- 12.7% UNSTABLE (4 datapoints)</td>
+  <td>4554</td>
+  <td><span class='improve'>1438.5%</span></td>
+  <td class='note'>IMPROVEMENT; run is unstable (baseline high variance); server: FT.AGGREGATE p50 increased 35.6% (baseline CV=11.1%); client: Latency decreased 93.5% (baseline CV=11.1%)</td>
 </tr>
 <tr class='improve'>
   <td class='test'><a href='https://benchmarksrediscom.grafana.net/d//3Ejv2wZnk?var-test_case=vecsim-arxiv-titles-384-angular-filters-m16-ef-128-fulltext-filter&amp;var-github_org=RediSearch&amp;var-github_repo=RediSearch&amp;var-version=80607&amp;var-version=80800&amp;from=now-30d&amp;to=now' target='_blank' rel='noopener noreferrer'>vecsim-arxiv-titles-384-angular-filters-m16-ef-128-fulltext-filter</a></td>
@@ -185,6 +146,20 @@ The two unstable numeric rows were rerun 5x per ref on May 18, 2026. The focused
   <td>4051</td>
   <td><span class='improve'>736.8%</span></td>
   <td class='note'>IMPROVEMENT</td>
+</tr>
+<tr class='improve'>
+  <td class='test'><a href='https://benchmarksrediscom.grafana.net/d//3Ejv2wZnk?var-test_case=search-numeric&amp;var-github_org=RediSearch&amp;var-github_repo=RediSearch&amp;var-version=80607&amp;var-version=80800&amp;from=now-30d&amp;to=now' target='_blank' rel='noopener noreferrer'>search-numeric</a></td>
+  <td>2442 +- 24.6% UNSTABLE (5 datapoints)</td>
+  <td>19281</td>
+  <td><span class='improve'>689.7%</span></td>
+  <td class='note'>IMPROVEMENT; run is unstable (baseline high variance); server: FT.SEARCH p50 increased 17.3% (baseline CV=18.2%); client: Latency decreased 87.3% (baseline CV=17.6%)</td>
+</tr>
+<tr class='improve'>
+  <td class='test'><a href='https://benchmarksrediscom.grafana.net/d//3Ejv2wZnk?var-test_case=search-numeric-sortby-desc&amp;var-github_org=RediSearch&amp;var-github_repo=RediSearch&amp;var-version=80607&amp;var-version=80800&amp;from=now-30d&amp;to=now' target='_blank' rel='noopener noreferrer'>search-numeric-sortby-desc</a></td>
+  <td>2347 +- 41.2% UNSTABLE (3 datapoints)</td>
+  <td>17309 +- 15.7% UNSTABLE (2 datapoints)</td>
+  <td><span class='improve'>637.4%</span></td>
+  <td class='note'>IMPROVEMENT; run is unstable (baseline &amp; comparison high variance); server: FT.SEARCH p50 increased 38.2% (baseline CV=29.0%); client: Latency decreased 86.3% (baseline CV=28.3%)</td>
 </tr>
 <tr class='improve'>
   <td class='test'><a href='https://benchmarksrediscom.grafana.net/d//3Ejv2wZnk?var-test_case=ftsb-10K-multivalue-numeric-json&amp;var-github_org=RediSearch&amp;var-github_repo=RediSearch&amp;var-version=80607&amp;var-version=80800&amp;from=now-30d&amp;to=now' target='_blank' rel='noopener noreferrer'>ftsb-10K-multivalue-numeric-json</a></td>
@@ -221,7 +196,33 @@ The two unstable numeric rows were rerun 5x per ref on May 18, 2026. The focused
   <td><span class='improve'>12.8%</span></td>
   <td class='note'>IMPROVEMENT</td>
 </tr>
-</tbody></table><h2>No Significant Changes</h2>
+</tbody></table>
+<h2>Validation Reruns For Unstable Runs</h2>
+<p class="note">
+The two unstable numeric rows were rerun 5x per ref on May 18, 2026. The focused comparison uses branch labels
+<code>historical-3020486</code> (8.6.7) and <code>historical-dde8e68</code> (8.8.0), and the same
+<code>oss-standalone</code> / <code>x86_64</code> filters.
+</p>
+<table>
+<thead><tr><th>Test</th><th>8.6.7 rerun</th><th>8.8.0 rerun</th><th>Throughput change</th><th>Latency note</th></tr></thead>
+<tbody>
+<tr class="improve">
+  <td class="test"><a href="https://benchmarksrediscom.grafana.net/d//3Ejv2wZnk?var-test_case=search-numeric&amp;var-github_org=RediSearch&amp;var-github_repo=RediSearch&amp;var-branch=historical-3020486&amp;var-branch=historical-dde8e68&amp;from=now-30d&amp;to=now" target="_blank" rel="noopener noreferrer">search-numeric</a></td>
+  <td>4484 +- 14.8% UNSTABLE (5 datapoints)</td>
+  <td>15330 +- 7.0% (5 datapoints)</td>
+  <td><span class="improve">+241.9%</span></td>
+  <td class="note">IMPROVEMENT; run is unstable (baseline high variance); server p50 FT.SEARCH increased 214.7%, while client Latency decreased 70.2%.</td>
+</tr>
+<tr class="improve">
+  <td class="test"><a href="https://benchmarksrediscom.grafana.net/d//3Ejv2wZnk?var-test_case=search-filtering-tag-numeric&amp;var-github_org=RediSearch&amp;var-github_repo=RediSearch&amp;var-branch=historical-3020486&amp;var-branch=historical-dde8e68&amp;from=now-30d&amp;to=now" target="_blank" rel="noopener noreferrer">search-filtering-tag-numeric</a></td>
+  <td>305 +- 11.7% UNSTABLE (5 datapoints)</td>
+  <td>3668 +- 10.1% UNSTABLE (5 datapoints)</td>
+  <td><span class="improve">+1103.9%</span></td>
+  <td class="note">IMPROVEMENT; run is unstable (baseline &amp; comparison high variance); server p50 FT.AGGREGATE increased 71.3%, while client Latency decreased 91.7%.</td>
+</tr>
+</tbody>
+</table>
+<h2>No Significant Changes</h2>
 <table>
 <thead><tr><th>Test</th><th>Baseline 80607</th><th>Comparison 80800</th><th>Change</th><th>Note</th></tr></thead>
 <tbody>
@@ -250,7 +251,7 @@ The two unstable numeric rows were rerun 5x per ref on May 18, 2026. The focused
 <h2>Source Summary</h2>
 <ul class="note">
 <li>Detected a total of 3 no-significant-change rows between versions.</li>
-<li>Detected a total of 4 highly unstable benchmarks (4 baseline, 1 comparison).</li>
-<li>Detected a total of 11 improvements above the improvement water line.</li>
+<li>Detected a total of 4 improvements from unstable runs (4 baseline, 1 comparison).</li>
+<li>Detected a total of 15 improvements above the improvement water line.</li>
 <li>Detected a total of 1 regressions bellow the regression water line 12.0%.</li>
 </ul>
