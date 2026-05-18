@@ -1,7 +1,7 @@
 <!doctype html>
 <meta charset="utf-8">
 <title>RediSearch 8.6.7 to 8.8.0 release-tag benchmark compare</title>
-<meta name="description" content="RediSearch release-tag benchmark comparison: 80607 vs 80800 on oss-standalone x86_64. One confirmed regression, four unstable rows, eleven improvements; includes a focused 5x rerun for the numeric outliers validated directly against RedisTimeSeries.">
+<meta name="description" content="RediSearch release-tag benchmark comparison: 80607 vs 80800 on oss-standalone x86_64. One confirmed regression, four unstable rows, eleven improvements; includes a focused 5x rerun for the numeric outliers.">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="RediSearch shared reports">
 <meta property="og:title" content="RediSearch 8.6.7 to 8.8.0 release-tag benchmark compare">
@@ -37,7 +37,6 @@
   tr.improve td { background: #f8fff9; }
   tr.muted td { color: #777; background: #fafafa; }
   .callout { border-left: 4px solid #b00; background: #fff8f8; padding: 8px 12px; margin: 1rem 0; }
-  .validation { border-left: 4px solid #1a5fb4; background: #eef5ff; padding: 8px 12px; margin: 1rem 0; }
   .links { margin-top: 1.5rem; }
 </style>
 <h1>RediSearch 8.6.7 to 8.8.0 release-tag benchmark compare</h1>
@@ -51,7 +50,7 @@ is <span class="regress">-53.6%</span>
 Baseline tag <code>80607</code> (8.6.7) vs comparison tag <code>80800</code> (8.8.0).
 Metric tuple: <code>OverallRates.overallOpsRate</code>, <code>Tests.OVERALL.Throughput_ops_sec_</code>,
 <code>Ops/sec</code>, <code>rps</code>, <code>Tests.Overall.rps</code>.
-Sample policy: latest 5 RTS samples per time series, regression waterline 12%.
+Sample policy: latest 5 samples per time series, regression waterline 12%.
 </p>
 
 <table>
@@ -65,7 +64,7 @@ Sample policy: latest 5 RTS samples per time series, regression waterline 12%.
   <div class="metric"><b>11</b><span>improvements above waterline</span></div>
   <div class="metric"><b>1</b><span>confirmed regression</span></div>
   <div class="metric"><b>4</b><span>unstable / insufficient-evidence rows</span></div>
-  <div class="metric"><b>19/19</b><span>report-valued rows validated from RTS</span></div>
+  <div class="metric"><b>19/19</b><span>report rows with values</span></div>
 </div>
 
 <h2>Reading The Report</h2>
@@ -73,17 +72,9 @@ Sample policy: latest 5 RTS samples per time series, regression waterline 12%.
 <li>The only confirmed regression is the enwiki abstract HASH GC workload. It is a throughput drop, not just a noisy row.</li>
 <li>The two apparent positive-throughput outliers in the issues table are marked unstable because baseline variance is high and latency validation is not consistent enough to treat them as confirmed regressions. A focused 5x rerun is included below.</li>
 <li>The largest improvements are mostly numeric/vector query paths and JSON numeric workloads, but most comparison rows only have one 80800 datapoint.</li>
-<li>The four originally stale rows were refreshed from RTS with the same topology and architecture filters.</li>
+<li>The four originally stale rows were refreshed with the same topology and architecture filters.</li>
 </ul>
 
-<div class="validation">
-<b>Direct RTS validation:</b>
-the report-valued rows were recomputed from RedisTimeSeries with
-<code>deployment_name=oss-standalone</code>, <code>deployment_type=oss-standalone</code>,
-and <code>arch=x86_64</code>. Validated rows: <code>19</code>;
-stale rows refreshed: <code>4</code>;
-unexpected missing rows: <code>0</code>.
-</div>
 <h2>Performance Regressions And Issues</h2>
 <table>
 <thead><tr><th>Test</th><th>Baseline 80607</th><th>Comparison 80800</th><th>Change</th><th>Note</th></tr></thead>
@@ -149,13 +140,6 @@ The two unstable numeric rows were rerun 5x per ref on May 18, 2026. The focused
 </tr>
 </tbody>
 </table>
-<div class="validation">
-<b>Focused rerun RTS validation:</b>
-direct RedisTimeSeries reads returned one <code>Ops/sec</code> / <code>Totals</code> series per test/ref with
-<code>deployment_name=oss-standalone</code>, <code>deployment_type=oss-standalone</code>,
-<code>arch=x86_64</code>, and <code>triggering_env=circleci</code>. The five newest points matched the compare
-medians and variance shown above.
-</div>
 <h2>Performance Improvements</h2>
 <table>
 <thead><tr><th>Test</th><th>Baseline 80607</th><th>Comparison 80800</th><th>Change</th><th>Note</th></tr></thead>
