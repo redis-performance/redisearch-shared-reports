@@ -110,7 +110,7 @@ Sample policy: latest 5 samples per time series, regression waterline 12%.
   <td>28 +- 12.5% UNSTABLE (3 datapoints)</td>
   <td>514</td>
   <td><span class='improve'>1761.4%</span></td>
-  <td class='note'>IMPROVEMENT; run is unstable (baseline high variance); server: FT.SEARCH p50 increased 71.0% (baseline CV=11.6%); client: Latency decreased 94.6% (baseline CV=11.3%)</td>
+  <td class='note'>IMPROVEMENT; run is unstable because baseline variance is high.</td>
 </tr>
 <tr class='improve'>
   <td class='test'><a href='https://benchmarksrediscom.grafana.net/d//3Ejv2wZnk?var-test_case=search-high-cardinality-negation-term-comparison_union_all_other_terms&amp;var-github_org=RediSearch&amp;var-github_repo=RediSearch&amp;var-version=80607&amp;var-version=80800&amp;from=now-30d&amp;to=now' target='_blank' rel='noopener noreferrer'>search-high-cardinality-negation-term-comparison_union_all_other_terms</a></td>
@@ -124,7 +124,7 @@ Sample policy: latest 5 samples per time series, regression waterline 12%.
   <td>296 +- 12.7% UNSTABLE (4 datapoints)</td>
   <td>4554</td>
   <td><span class='improve'>1438.5%</span></td>
-  <td class='note'>IMPROVEMENT; run is unstable (baseline high variance); server: FT.AGGREGATE p50 increased 35.6% (baseline CV=11.1%); client: Latency decreased 93.5% (baseline CV=11.1%)</td>
+  <td class='note'>IMPROVEMENT; run is unstable because baseline variance is high.</td>
 </tr>
 <tr class='improve'>
   <td class='test'><a href='https://benchmarksrediscom.grafana.net/d//3Ejv2wZnk?var-test_case=vecsim-arxiv-titles-384-angular-filters-m16-ef-128-fulltext-filter&amp;var-github_org=RediSearch&amp;var-github_repo=RediSearch&amp;var-version=80607&amp;var-version=80800&amp;from=now-30d&amp;to=now' target='_blank' rel='noopener noreferrer'>vecsim-arxiv-titles-384-angular-filters-m16-ef-128-fulltext-filter</a></td>
@@ -152,14 +152,14 @@ Sample policy: latest 5 samples per time series, regression waterline 12%.
   <td>2442 +- 24.6% UNSTABLE (5 datapoints)</td>
   <td>19281</td>
   <td><span class='improve'>689.7%</span></td>
-  <td class='note'>IMPROVEMENT; run is unstable (baseline high variance); server: FT.SEARCH p50 increased 17.3% (baseline CV=18.2%); client: Latency decreased 87.3% (baseline CV=17.6%)</td>
+  <td class='note'>IMPROVEMENT; run is unstable because baseline variance is high.</td>
 </tr>
 <tr class='improve'>
   <td class='test'><a href='https://benchmarksrediscom.grafana.net/d//3Ejv2wZnk?var-test_case=search-numeric-sortby-desc&amp;var-github_org=RediSearch&amp;var-github_repo=RediSearch&amp;var-version=80607&amp;var-version=80800&amp;from=now-30d&amp;to=now' target='_blank' rel='noopener noreferrer'>search-numeric-sortby-desc</a></td>
   <td>2347 +- 41.2% UNSTABLE (3 datapoints)</td>
   <td>17309 +- 15.7% UNSTABLE (2 datapoints)</td>
   <td><span class='improve'>637.4%</span></td>
-  <td class='note'>IMPROVEMENT; run is unstable (baseline &amp; comparison high variance); server: FT.SEARCH p50 increased 38.2% (baseline CV=29.0%); client: Latency decreased 86.3% (baseline CV=28.3%)</td>
+  <td class='note'>IMPROVEMENT; run is unstable because baseline and comparison variance are high.</td>
 </tr>
 <tr class='improve'>
   <td class='test'><a href='https://benchmarksrediscom.grafana.net/d//3Ejv2wZnk?var-test_case=ftsb-10K-multivalue-numeric-json&amp;var-github_org=RediSearch&amp;var-github_repo=RediSearch&amp;var-version=80607&amp;var-version=80800&amp;from=now-30d&amp;to=now' target='_blank' rel='noopener noreferrer'>ftsb-10K-multivalue-numeric-json</a></td>
@@ -197,28 +197,42 @@ Sample policy: latest 5 samples per time series, regression waterline 12%.
   <td class='note'>IMPROVEMENT</td>
 </tr>
 </tbody></table>
-<h2>Validation Reruns For Unstable Runs</h2>
+<h2>Validation Reruns For Unstable Benchmarks</h2>
 <p class="note">
-The two unstable numeric rows were rerun 5x per ref on May 18, 2026. The focused comparison uses branch labels
+The four unstable numeric rows were rerun 5x per ref on May 18, 2026. The focused comparison uses branch labels
 <code>historical-3020486</code> (8.6.7) and <code>historical-dde8e68</code> (8.8.0), and the same
 <code>oss-standalone</code> / <code>x86_64</code> filters.
 </p>
 <table>
-<thead><tr><th>Test</th><th>8.6.7 rerun</th><th>8.8.0 rerun</th><th>Throughput change</th><th>Latency note</th></tr></thead>
+<thead><tr><th>Test</th><th>8.6.7 rerun</th><th>8.8.0 rerun</th><th>Throughput change</th><th>Note</th></tr></thead>
 <tbody>
+<tr class="improve">
+  <td class="test"><a href="https://benchmarksrediscom.grafana.net/d//3Ejv2wZnk?var-test_case=search-numeric-sortby-desc-optimize&amp;var-github_org=RediSearch&amp;var-github_repo=RediSearch&amp;var-branch=historical-3020486&amp;var-branch=historical-dde8e68&amp;from=now-30d&amp;to=now" target="_blank" rel="noopener noreferrer">search-numeric-sortby-desc-optimize</a></td>
+  <td>32 +- 15.0% UNSTABLE (5 datapoints)</td>
+  <td>564 +- 8.9% (5 datapoints)</td>
+  <td><span class="improve">+1638.5%</span></td>
+  <td class="note">IMPROVEMENT; run is unstable because baseline variance is high.</td>
+</tr>
 <tr class="improve">
   <td class="test"><a href="https://benchmarksrediscom.grafana.net/d//3Ejv2wZnk?var-test_case=search-numeric&amp;var-github_org=RediSearch&amp;var-github_repo=RediSearch&amp;var-branch=historical-3020486&amp;var-branch=historical-dde8e68&amp;from=now-30d&amp;to=now" target="_blank" rel="noopener noreferrer">search-numeric</a></td>
   <td>4484 +- 14.8% UNSTABLE (5 datapoints)</td>
   <td>15330 +- 7.0% (5 datapoints)</td>
   <td><span class="improve">+241.9%</span></td>
-  <td class="note">IMPROVEMENT; run is unstable (baseline high variance); server p50 FT.SEARCH increased 214.7%, while client Latency decreased 70.2%.</td>
+  <td class="note">IMPROVEMENT; run is unstable because baseline variance is high.</td>
 </tr>
 <tr class="improve">
   <td class="test"><a href="https://benchmarksrediscom.grafana.net/d//3Ejv2wZnk?var-test_case=search-filtering-tag-numeric&amp;var-github_org=RediSearch&amp;var-github_repo=RediSearch&amp;var-branch=historical-3020486&amp;var-branch=historical-dde8e68&amp;from=now-30d&amp;to=now" target="_blank" rel="noopener noreferrer">search-filtering-tag-numeric</a></td>
   <td>305 +- 11.7% UNSTABLE (5 datapoints)</td>
   <td>3668 +- 10.1% UNSTABLE (5 datapoints)</td>
   <td><span class="improve">+1103.9%</span></td>
-  <td class="note">IMPROVEMENT; run is unstable (baseline &amp; comparison high variance); server p50 FT.AGGREGATE increased 71.3%, while client Latency decreased 91.7%.</td>
+  <td class="note">IMPROVEMENT; run is unstable because baseline and comparison variance are high.</td>
+</tr>
+<tr class="improve">
+  <td class="test"><a href="https://benchmarksrediscom.grafana.net/d//3Ejv2wZnk?var-test_case=search-numeric-sortby-desc&amp;var-github_org=RediSearch&amp;var-github_repo=RediSearch&amp;var-branch=historical-3020486&amp;var-branch=historical-dde8e68&amp;from=now-30d&amp;to=now" target="_blank" rel="noopener noreferrer">search-numeric-sortby-desc</a></td>
+  <td>2946 +- 31.3% UNSTABLE (5 datapoints)</td>
+  <td>15227 +- 12.0% UNSTABLE (5 datapoints)</td>
+  <td><span class="improve">+416.8%</span></td>
+  <td class="note">IMPROVEMENT; run is unstable because baseline and comparison variance are high.</td>
 </tr>
 </tbody>
 </table>
